@@ -1,4 +1,4 @@
-# application_gateway.tf
+# application_gateway.tf file
 resource "azurerm_web_application_firewall_policy" "waf_policy" {
   name                = "wafpolicy-appgw"
   resource_group_name = var.resource_group_name
@@ -102,4 +102,5 @@ resource "azurerm_application_gateway" "appgw" {
     data     = filebase64("C:/Users/arunagim/Desktop/cloudapp.pfx")
     password = var.cert_password
   }
+
 }
