@@ -97,10 +97,11 @@ resource "azurerm_application_gateway" "appgw" {
     backend_http_settings_name = "http-settings"
   }
 
-  ssl_certificate {
-    name     = "appgw-cert"
-    data     = filebase64("C:/Users/arunagim/Desktop/cloudapp.pfx")
-    password = var.cert_password
-  }
+#  ssl_certificate {
+ #   name     = "appgw-cert"
+  #  data     = filebase64("C:/Users/arunagim/Desktop/cloudapp.pfx")
+   # password = var.cert_password
+  #}
 
 }
+
