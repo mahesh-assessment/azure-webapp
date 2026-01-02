@@ -1,4 +1,6 @@
 # keyvault.tf
+data "azurerm_client_config" "current" {}
+
 resource "azurerm_key_vault" "kv" {
   name                       = "kv-quote-${random_id.rand.hex}"
   location                   = azurerm_resource_group.rg.location
@@ -8,6 +10,7 @@ resource "azurerm_key_vault" "kv" {
   soft_delete_retention_days = 7
   purge_protection_enabled   = false
 
+  # Grant yourself full access
   access_policy {
     tenant_id = data.azurerm_client_config.current.tenant_id
     object_id = data.azurerm_client_config.current.object_id
@@ -24,7 +27,7 @@ resource "azurerm_key_vault" "kv" {
     ]
   }
 
-  # Allow AKS system-assigned identity to access secrets
+  # Grant AKS identity access to read secrets
   access_policy {
     tenant_id = data.azurerm_client_config.current.tenant_id
     object_id = azurerm_kubernetes_cluster.aks.identity[0].principal_id
@@ -34,11 +37,24 @@ resource "azurerm_key_vault" "kv" {
       "List"
     ]
   }
+
+  tags = {
+    environment = "production"
+  }
 }
 
-resource "azurerm_key_vault_secret" "cert_password" {
+# Create secrets with initial values (you'll update these manually first)
+resource "azurerm_key_vault_secret" "appgw_cert_password" {
   name         = "appgw-cert-password"
-  value        = var.cert_password
+  value        = "ChangeMe123!"  # You'll update this manually after creation
+  key_vault_id = azurerm_key_vault.kv.id
+
+  depends_on = [azurerm_key_vault.kv]
+}
+
+resource "azurerm_key_vault_secret" "sql_admin_password" {
+  name         = "sql-admin-password"
+  value        = "ChangeMe123!"  # You'll update this manually after creation
   key_vault_id = azurerm_key_vault.kv.id
 
   depends_on = [azurerm_key_vault.kv]
