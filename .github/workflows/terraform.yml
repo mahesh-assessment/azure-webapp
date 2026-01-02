@@ -1,4 +1,4 @@
-name: Debug Terraform
+name: Debug Terraform (OIDC)
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - "Infra/terraform/**"
-  workflow_dispatch: {} 
+  workflow_dispatch: {}
 
 permissions:
   contents: read
@@ -19,28 +19,25 @@ jobs:
     defaults:
       run:
         working-directory: Infra/terraform
-        
+
     env:
-      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-      #ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_USE_OIDC: true
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v3
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
 
-    - name: Terraform Init
-      run: terraform init
+      - name: Terraform Init
+        run: terraform init
 
-    - name: Terraform Validate
-      run: terraform validate
+      - name: Terraform Validate
+        run: terraform validate
 
-    - name: Terraform Plan
-      run: terraform plan
-
-#    - name: Terraform Apply
-#      run: terraform apply -auto-approve
+      - name: Terraform Plan
+        run: terraform plan
