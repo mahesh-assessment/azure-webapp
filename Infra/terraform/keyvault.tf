@@ -1,4 +1,4 @@
-# keyvault.tf - KEEP THIS DECLARATION
+# keyvault.tf
 data "azurerm_client_config" "current" {}
 
 resource "azurerm_key_vault" "kv" {
@@ -43,32 +43,34 @@ resource "azurerm_key_vault" "kv" {
   }
 }
 
-# Generate random passwords
-resource "random_password" "appgw_cert" {
-  length           = 32
-  special          = true
-  override_special = "!@#$%&*()-_=+[]{}<>:?"
-}
-
-resource "random_password" "sql_admin" {
-  length           = 32
-  special          = true
-  override_special = "!@#$%&*()-_=+[]{}<>:?"
-}
-
-# Store generated passwords in Key Vault
-resource "azurerm_key_vault_secret" "appgw_cert_password" {
+# Data sources to read existing secrets (will be created by CLI script)
+data "azurerm_key_vault_secret" "appgw_cert_password" {
   name         = "appgw-cert-password"
-  value        = random_password.appgw_cert.result
   key_vault_id = azurerm_key_vault.kv.id
-
+  
+  # This will fail on first run, but that's OK - we'll create secrets after KV
   depends_on = [azurerm_key_vault.kv]
 }
 
-resource "azurerm_key_vault_secret" "sql_admin_password" {
+data "azurerm_key_vault_secret" "sql_admin_password" {
   name         = "sql-admin-password"
-  value        = random_password.sql_admin.result
+  key_vault_id = azurerm_key_vault.kv.id
+  
+  depends_on = [azurerm_key_vault.kv]
+}
+
+# Store certificate in Key Vault too (optional but recommended)
+resource "azurerm_key_vault_certificate" "appgw" {
+  name         = "appgw-ssl-certificate"
   key_vault_id = azurerm_key_vault.kv.id
 
-  depends_on = [azurerm_key_vault.kv]
+  certificate {
+    contents = filebase64("${path.module}/certificates/cloudapp.pfx")
+    password = data.azurerm_key_vault_secret.appgw_cert_password.value
+  }
+
+  depends_on = [
+    azurerm_key_vault.kv,
+    data.azurerm_key_vault_secret.appgw_cert_password
+  ]
 }
