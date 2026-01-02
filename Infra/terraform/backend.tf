@@ -6,6 +6,6 @@ terraform {
     key                  = "quote-app/production.tfstate"
     use_azuread_auth     = true
     subscription_id      = "74c4f319-b9f6-4b4f-b910-b6bb2923cf97"
-    tenant_id           = var.tenant_id
+    # tenant_id           = var.tenant_id
   }
 }
