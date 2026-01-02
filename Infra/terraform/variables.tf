@@ -10,7 +10,5 @@ variable "vnet_cidr" {
   default = "10.10.0.0/16"
 }
 
-variable "cert_password" {
-  default = "123"
-}
+
 
