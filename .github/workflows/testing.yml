@@ -1,4 +1,4 @@
-name: Terraform (Azure OIDC)
+name: Terraform-testing
 
 on:
   pull_request:
