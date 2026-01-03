@@ -46,6 +46,33 @@ resource "azurerm_key_vault" "local_for_aks" {
     ]
   }
 
+# Use external data source to get Service Principal Object ID
+data "external" "github_sp_object_id" {
+  program = ["bash", "-c", <<EOF
+    # Get Object ID from Client ID
+    OBJECT_ID=$(az ad sp show --id "${var.github_sp_client_id}" --query id -o tsv 2>/dev/null || echo "")
+    
+    # Return as JSON
+    echo "{\"object_id\": \"$OBJECT_ID\"}"
+  EOF
+  ]
+  
+  # Only run if client_id is provided
+  query = {
+    client_id = var.github_sp_client_id
+  }
+}
+
+# Then use it
+resource "azurerm_key_vault_access_policy" "github_actions" {
+  key_vault_id = data.azurerm_key_vault.secrets.id
+  
+  tenant_id = data.azurerm_client_config.current.tenant_id
+  object_id = data.external.github_sp_object_id.result.object_id  # Dynamic
+  
+  secret_permissions = ["Get", "List"]
+}
+
   # Grant yourself access for management
   access_policy {
     tenant_id = data.azurerm_client_config.current.tenant_id
