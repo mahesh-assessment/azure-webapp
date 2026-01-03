@@ -49,6 +49,8 @@ jobs:
           echo "ARM_USE_OIDC=$ARM_USE_OIDC"
           echo "OIDC URL=$ACTIONS_ID_TOKEN_REQUEST_URL"
           echo "OIDC AUD=$ACTIONS_ID_TOKEN_REQUEST_TOKEN"
+          echo "Environment: ${{ vars.ENVIRONMENT_NAME || 'not set' }}"
+          echo "Job environment: ${{ job.environment || 'not set' }}"
 
       - name: Debug OIDC Token Claims
         run: |
