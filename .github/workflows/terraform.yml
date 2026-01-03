@@ -72,12 +72,12 @@ jobs:
       # Terraform Plan (PR only)
       # -----------------------------
       - name: Terraform Plan
-        if: github.event_name == 'pull_request'
+        #if: github.event_name == 'pull_request'
         run: terraform plan -input=false
 
       # -----------------------------
       # Terraform Apply (main only)
       # -----------------------------
       - name: Terraform Apply
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        #if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve -input=false
