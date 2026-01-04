@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sql-config
+  namespace: {{ .Release.Namespace | default .Values.namespace.name }}
+  labels:
+    {{- include "quote-app.labels" . | nindent 4 }}
+  annotations:
+    {{- include "quote-app.annotations" . | nindent 4 }}
+data:
+  SQL_SERVER: {{ .Values.database.sqlServer | quote }}
+  SQL_DATABASE: {{ .Values.database.sqlDatabase | quote }}

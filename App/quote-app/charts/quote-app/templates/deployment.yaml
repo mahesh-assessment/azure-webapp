@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quote-app
+  namespace: {{ .Release.Namespace | default .Values.namespace.name }}
+  labels:
+    {{- include "quote-app.labels" . | nindent 4 }}
+  annotations:
+    {{- include "quote-app.annotations" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.app.replicas }}
+  selector:
+    matchLabels:
+      {{- include "quote-app.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        {{- include "quote-app.selectorLabels" . | nindent 8 }}
+    spec:
+      # FIX: Security context with matching UID (10001 from Dockerfile)
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001  # Must match Dockerfile UID
+        runAsGroup: 10001
+        fsGroup: 2000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: quote-app
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          readOnlyRootFilesystem: true
+          privileged: false
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        env:
+        - name: SQL_SERVER
+          valueFrom:
+            configMapKeyRef:
+              name: sql-config
+              key: SQL_SERVER
+        - name: SQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: sql-config
+              key: SQL_DATABASE
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+        # FIX: Use /healthz and /ready endpoints (now in app.py)
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 1

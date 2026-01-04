@@ -1,0 +1,45 @@
+# POC Environment values
+
+# Application
+app:
+  replicas: 2
+
+# Image
+image:
+  repository: quoteacr60b19794.azurecr.io/quote-app
+  tag: v1
+  pullPolicy: Always
+
+# Resources
+resources:
+  requests:
+    memory: "128Mi"
+    cpu: "100m"
+  limits:
+    memory: "256Mi"
+    cpu: "500m"
+
+# Database
+database:
+  sqlServer: "sql-quote-60b19794.privatelink.database.windows.net"
+  sqlDatabase: "quotedb"
+
+# Ingress (enabled by default in template)
+
+# Autoscaling
+autoscaling:
+  enabled: false
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPU: 70
+  targetMemory: 80
+
+# Network Policy
+networkPolicy:
+  enabled: true
+  sqlServerCIDR: "10.10.2.0/24"
+  acrCIDR: "52.136.0.0/14"
+
+# Namespace
+namespace:
+  name: quote-app

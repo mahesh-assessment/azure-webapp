@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: quote-app-internal
+  namespace: {{ .Release.Namespace | default .Values.namespace.name }}
+  labels:
+    {{- include "quote-app.labels" . | nindent 4 }}
+  annotations:
+    {{- include "quote-app.annotations" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    {{- include "quote-app.selectorLabels" . | nindent 4 }}
+  ports:
+  - port: 80
+    targetPort: 8080
+  sessionAffinity: None

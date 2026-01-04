@@ -1,0 +1,17 @@
+apiVersion: v2
+name: quote-app
+description: Quote Application with SQL Server backend
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+
+# Dependencies (example - add as needed)
+dependencies:
+  # - name: redis
+  #   version: "17.0.0"
+  #   repository: "https://charts.bitnami.com/bitnami"
+  #   condition: redis.enabled
+  # - name: postgresql
+  #   version: "12.0.0"
+  #   repository: "https://charts.bitnami.com/bitnami"
+  #   condition: postgresql.enabled

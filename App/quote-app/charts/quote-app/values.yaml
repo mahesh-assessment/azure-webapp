@@ -1,0 +1,45 @@
+# Default values
+
+# Application
+app:
+  replicas: 1
+
+# Image
+image:
+  repository: quoteacr60b19794.azurecr.io/quote-app
+  tag: latest
+  pullPolicy: Always
+
+# Resources
+resources:
+  requests:
+    memory: "128Mi"
+    cpu: "100m"
+  limits:
+    memory: "256Mi"
+    cpu: "500m"
+
+# Database
+database:
+  sqlServer: ""
+  sqlDatabase: ""
+  sqlUsername: ""
+  sqlPassword: ""
+
+# Autoscaling
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPU: 70
+  targetMemory: 80
+
+# Network Policy
+networkPolicy:
+  enabled: false
+  sqlServerCIDR: ""
+  acrCIDR: ""
+
+# Namespace
+namespace:
+  name: quote-app
