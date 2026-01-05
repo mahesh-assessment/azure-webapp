@@ -98,8 +98,8 @@ graph TD
     classDef helm fill:#fff3e0,stroke:#e65100
     classDef argocd fill:#f1f8e9,stroke:#33691e
     
-    %% Developer Actions
-    DEV[Developer]:::dev
+    %% Engineer Actions
+    DEV[Engineer]:::dev
     
     %% Repository Structure
     subgraph "Single Git Repository"
