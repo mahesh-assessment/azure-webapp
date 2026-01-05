@@ -6,5 +6,7 @@ resource "azurerm_public_ip" "appgw_pip" {
   allocation_method = "Static"
   sku               = "Standard"
 
+  domain_name_label = "quoteapp"
+
   zones = ["1", "2", "3"]
 }
