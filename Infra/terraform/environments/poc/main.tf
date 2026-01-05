@@ -1,6 +1,6 @@
 terraform {
   required_version = ">= 1.5.0"
-  
+
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -11,7 +11,6 @@ terraform {
       version = "~> 3.0"
     }
   }
-
 }
 
 provider "azurerm" {
@@ -53,15 +52,15 @@ locals {
   environment = "poc"
   location    = "centralindia"
   rg_name     = "rg-quote-app-prod"
-  
+
   common_tags = {
     Environment = local.environment
     Project     = "quote-app"
     ManagedBy   = "Terraform"
   }
-  
+
   unique_suffix = random_id.suffix.hex
-  
+
   # Resource names
   aks_cluster_name = "aks-quote-prod-${local.unique_suffix}"
   acr_name         = "quoteacr${local.unique_suffix}"
@@ -73,7 +72,7 @@ locals {
 # Modules
 module "resource_group" {
   source = "../../modules/resource-group"
-  
+
   name     = local.rg_name
   location = local.location
   tags     = local.common_tags
@@ -81,18 +80,18 @@ module "resource_group" {
 
 module "networking" {
   source = "../../modules/networking"
-  
+
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
   vnet_name           = "vnet-quote-app-prod"
   address_space       = ["10.10.0.0/16"]
   subnets = {
     aks = {
-      address_prefixes = ["10.10.1.0/24"]
+      address_prefixes  = ["10.10.1.0/24"]
       service_endpoints = ["Microsoft.Sql", "Microsoft.KeyVault"]
     }
     sql = {
-      address_prefixes = ["10.10.2.0/24"]
+      address_prefixes  = ["10.10.2.0/24"]
       service_endpoints = ["Microsoft.Sql"]
     }
     appgw = {
@@ -104,7 +103,7 @@ module "networking" {
 
 module "acr" {
   source = "../../modules/acr"
-  
+
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
   name                = local.acr_name
@@ -115,7 +114,7 @@ module "acr" {
 
 module "aks" {
   source = "../../modules/aks"
-  
+
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
   cluster_name        = local.aks_cluster_name
@@ -123,20 +122,20 @@ module "aks" {
   kubernetes_version  = "1.27"
   workload_identity_enabled = true
   oidc_issuer_enabled = true
-  
+
   default_node_pool = {
     name           = "system"
     node_count     = 3
     vm_size        = "Standard_D2ls_v5"
     vnet_subnet_id = module.networking.subnet_ids["aks"]
   }
-  
+
   tags = local.common_tags
 }
 
 module "sql" {
   source = "../../modules/sql"
-  
+
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
   server_name         = local.sql_server_name
@@ -152,7 +151,7 @@ module "sql" {
 
 module "app_gateway" {
   source = "../../modules/app-gateway"
-  
+
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
   name                = local.app_gateway_name
@@ -161,7 +160,7 @@ module "app_gateway" {
   subnet_id           = module.networking.subnet_ids["appgw"]
   domain_name_label   = "quoteapp-prod"
   host_name           = "quoteapp.centralindia.cloudapp.azure.com"
-  ssl_certificate_data = data.azurerm_key_vault_secret.appgw_certificate_base64.value
+  ssl_certificate_data     = data.azurerm_key_vault_secret.appgw_certificate_base64.value
   ssl_certificate_password = data.azurerm_key_vault_secret.appgw_cert_password.value
   health_probe_host   = "quoteapp.centralindia.cloudapp.azure.com"
   tags                = local.common_tags
@@ -169,7 +168,7 @@ module "app_gateway" {
 
 module "key_vault" {
   source = "../../modules/key-vault"
-  
+
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
   name                = local.key_vault_name
@@ -177,19 +176,19 @@ module "key_vault" {
   sku_name            = "standard"
   purge_protection_enabled = false
   soft_delete_retention_days = 7
-  
+
   access_policies = [
     {
-      tenant_id = data.azurerm_client_config.current.tenant_id
-      object_id = data.azurerm_client_config.current.object_id
+      tenant_id          = data.azurerm_client_config.current.tenant_id
+      object_id          = data.azurerm_client_config.current.object_id
       secret_permissions = ["Get", "List", "Set", "Delete", "Recover"]
     },
     {
-      tenant_id = data.azurerm_client_config.current.tenant_id
-      object_id = module.aks.kubelet_identity_object_id
+      tenant_id          = data.azurerm_client_config.current.tenant_id
+      object_id          = module.aks.kubelet_identity_object_id
       secret_permissions = ["Get", "List"]
-    }
+    },
   ]
-  
+
   tags = local.common_tags
 }
