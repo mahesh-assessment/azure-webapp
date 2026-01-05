@@ -63,11 +63,16 @@ jobs:
       - name: Build Docker image
         run: |
           cd App/quote-app
-          docker build -f docker/Dockerfile \
-            -t ${{ env.ACR_REGISTRY }}/${{ env.APP_NAME }}:${{ env.IMAGE_TAG }} .
-          docker tag \
-            ${{ env.ACR_REGISTRY }}/${{ env.APP_NAME }}:${{ env.IMAGE_TAG }} \
-            ${{ env.ACR_REGISTRY }}/${{ env.APP_NAME }}:latest
+          # Build image with unique tag
+          docker build -f docker/Dockerfile -t ${{ env.ACR_REGISTRY }}/${{ env.APP_NAME }}:${{ env.IMAGE_TAG }} .
+
+          # Optionally tag with run number instead of 'latest'
+          docker tag ${{ env.ACR_REGISTRY }}/${{ env.APP_NAME }}:${{ env.IMAGE_TAG }} ${{ env.ACR_REGISTRY }}/${{ env.APP_NAME }}:run-${{ github.run_number }}
+
+      - name: Push Docker image
+        run: |
+          docker push ${{ env.ACR_REGISTRY }}/${{ env.APP_NAME }}:${{ env.IMAGE_TAG }}
+          docker push ${{ env.ACR_REGISTRY }}/${{ env.APP_NAME }}:run-${{ github.run_number }}
 
       - name: Push Docker image
         run: |
