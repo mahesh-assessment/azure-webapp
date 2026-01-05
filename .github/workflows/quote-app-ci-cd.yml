@@ -7,6 +7,7 @@ on:
       - 'App/quote-app/src/**'
       - 'App/quote-app/docker/**'
       - 'App/quote-app/requirements.txt'
+  workflow_dispatch:
 
 permissions:
   id-token: write
