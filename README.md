@@ -174,7 +174,4 @@ graph TD
 2. **Application Pipeline** (`/app/` folder):
    - PR → Build & test Docker image
    - Merge → Push to ACR → Update Helm → ArgoCD auto-deploys
-
-**One-Line Summary:** Code → PR → Review → Merge → Auto-deploy to production
--  High availability with multiple pods
 ```
