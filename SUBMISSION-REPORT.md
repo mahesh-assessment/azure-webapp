@@ -18,7 +18,7 @@
 | **Azure SQL Database connection** | ✅ Enhanced | Database accessible with in the private network |
 | **Seeded with famous quotes** | ✅ random quotes seeded |
 | **Display random quotes** | ✅ Optimized | <100ms response time|
-| **Treat data as critical PII** | ✅ Enterprise-grade | Always Encrypted + RLS + Audit logging |
+| **Treat data as critical PII** | ✅ Enterprise-grade | Always Encrypted |
 | **Highly available** | ✅ Multi-layer HA | 99.9% SLA with zone redundancy |
 | **Everything hosted in Azure** | ✅ 100% Azure | Terraform-managed infrastructure |
 | **Provisioned using Terraform** | ✅ Git action | Complete Infrastructure as Code |
