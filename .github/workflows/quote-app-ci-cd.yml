@@ -11,7 +11,7 @@ on:
 
 permissions:
   id-token: write
-  contents: read
+  contents: write
 
 env:
   ACR_REGISTRY: quoteacr60b19794.azurecr.io
