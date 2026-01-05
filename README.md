@@ -1,6 +1,7 @@
+# Assessment 
+create a public web application that connects to an Azure SQL database. The database should be seeded with a list of famous quotes, and when the site is accessed, it should query the database for a random quote and display it.
 
-# Application Architecture
-
+# Architecture
 ## System Overview
 
 ```mermaid
@@ -40,7 +41,7 @@ graph TB
     ACR[Azure Container Registry]:::azure
     
     %% Connections
-    INTERNET -- "HTTPS/HTTP<br/>Port 80/443" --> AGW
+    INTERNET -- "HTTPS/HTTP<br/>https://quoteapp.centralindia.cloudapp.azure.com/quote" --> AGW
     AGW -- "Internal HTTP<br/>Port 80" --> LB
     
     %% Health Probe Flow (CORRECTED)
@@ -128,7 +129,7 @@ graph TD
     end
     
     %% ArgoCD GitOps
-    ARGOCD_WATCHER[ArgoCD<br/>Monitors values.yaml]:::argocd
+    ARGOCD_WATCHER[ArgoCD<br/>Monitors code changes]:::argocd
     ARGOCD_SYNC[Auto-Sync to AKS]:::argocd
     
     %% Production
@@ -155,7 +156,7 @@ graph TD
     UPDATE_TAG -->|H. Updates| HELM_CHART
     
     %% ArgoCD Flow
-    HELM_CHART -->|I. Watched by| ARGOCD_WATCHER
+    HELM_CHART -->|I. Watched by Argocd (https://quoteapp.centralindia.cloudapp.azure.com/argocd)| ARGOCD_WATCHER
     ARGOCD_WATCHER -->|J. Auto-syncs| ARGOCD_SYNC
     ARGOCD_SYNC -->|K. Deploys| PROD_APP
 ```
