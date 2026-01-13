@@ -7,7 +7,7 @@ appVersion: "1.0.0"
 
 # Dependencies (example - add as needed)
 dependencies:
-  # - name: redis
+  ## - name: redis
   #   version: "17.0.0"
   #   repository: "https://charts.bitnami.com/bitnami"
   #   condition: redis.enabled
