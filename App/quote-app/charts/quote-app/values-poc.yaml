@@ -3,7 +3,7 @@ replicaCount: 2
 
 image:
   repository: quoteacr4a409b0a.azurecr.io/quote-app
-  tag: "157c672ed0eda9a6f406d56add27b0d5bfd7d450"
+  tag: "d6c3ba21a5f9087f5d07caf619e265604d7dabbc"
   pullPolicy: Always
 
 imagePullSecrets:
