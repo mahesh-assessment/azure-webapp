@@ -45,12 +45,12 @@ data "azurerm_key_vault_secret" "appgw_cert_password" {
   ]
 }
 
-#data "azurerm_key_vault_secret" "sql_admin_password" {
-#  name         = "sql-admin-password"
-#  key_vault_id = data.azurerm_key_vault.secrets.id
-#
- # depends_on = [
-  #  azurerm_key_vault_access_policy.terraform_read
- # ]
-#}
+data "azurerm_key_vault_secret" "sql_admin_password" {
+  name         = "sql-admin-password"
+  key_vault_id = data.azurerm_key_vault.secrets.id
+
+  depends_on = [
+    azurerm_key_vault_access_policy.terraform_read
+  ]
+}
 
