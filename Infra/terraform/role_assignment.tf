@@ -42,3 +42,12 @@ resource "azurerm_role_assignment" "aks_contributor_rg" {
     azurerm_kubernetes_cluster.aks
   ]
 }
+
+data "azurerm_client_config" "current" {}
+
+resource "azurerm_role_assignment" "kv_secrets_user" {
+  scope                = azurerm_key_vault.kv.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+
