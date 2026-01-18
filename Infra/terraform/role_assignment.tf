@@ -45,7 +45,7 @@ resource "azurerm_role_assignment" "aks_contributor_rg" {
 
 
 resource "azurerm_role_assignment" "kv_secrets_user" {
-  scope                = azurerm_key_vault.kv.id
+  scope                = azurerm_key_vault.secrets.id
   role_definition_name = "Key Vault Secrets User"
   principal_id         = data.azurerm_client_config.current.object_id
 }
