@@ -1,4 +1,4 @@
-# variables.tf
+## variables.tf
 variable "location" {
   default = "Central India"
 }
