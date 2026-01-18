@@ -8,7 +8,7 @@ SUBSCRIPTION_ID="74c4f319-b9f6-4b4f-b910-b6bb2923cf97"
 LOCATION="centralindia"
 
 TFSTATE_RG="rg-tfstate-vault"
-STORAGE_ACCOUNT_NAME="tfstatequote525"
+STORAGE_ACCOUNT_NAME="tfstatequote526"
 CONTAINER_NAME="tfstate"
 
 SP_NAME="terraform-backend-sp"
