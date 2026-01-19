@@ -12,8 +12,8 @@ permissions:
   contents: write
 
 env:
-  ACR_REGISTRY: quoteacr4a409b0a.azurecr.io
-  ACR_NAME: quoteacr4a409b0a
+  ACR_REGISTRY: quoteacr4064406a.azurecr.io
+  ACR_NAME: quoteacr4064406a
   APP_NAME: quote-app
   IMAGE_TAG: ${{ github.sha }}
 
