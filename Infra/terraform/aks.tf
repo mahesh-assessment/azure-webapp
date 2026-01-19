@@ -5,6 +5,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   dns_prefix                = "quoteaks"
   workload_identity_enabled = true
   oidc_issuer_enabled       = true
+  private_cluster_enabled   = true
 
 
   default_node_pool {
@@ -19,4 +20,5 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
 }
+
 
