@@ -2,7 +2,7 @@
 replicaCount: 2
 
 image:
-  repository: quoteacr4a409b0a.azurecr.io/quote-app
+  repository: quoteacr4064406a.azurecr.io/quote-app
   tag: "d6c3ba21a5f9087f5d07caf619e265604d7dabbc"
   pullPolicy: Always
 
@@ -39,7 +39,7 @@ autoscaling:
   enabled: false
 
 database:
-  sqlServer: "sql-quote-4a409b0a.privatelink.database.windows.net"
+  sqlServer: "sql-quote-4064406a.privatelink.database.windows.net"
   sqlDatabase: "quotedb"
 
 env:
