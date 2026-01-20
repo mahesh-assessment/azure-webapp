@@ -42,3 +42,22 @@ resource "azurerm_mssql_database" "db" {
     read   = "10m"
   }
 }
+
+resource "azurerm_mssql_database_transparent_data_encryption" "tde" {
+  database_id = azurerm_mssql_database.db.id
+  state       = "Enabled"
+}
+
+resource "azurerm_mssql_server_security_alert_policy" "alerts" {
+  server_name         = azurerm_mssql_server.sql.name
+  resource_group_name = azurerm_resource_group.rg.name
+  state               = "Enabled"
+}
+
+resource "azurerm_mssql_server_auditing_policy" "audit" {
+  server_id                  = azurerm_mssql_server.sql.id
+  storage_endpoint           = azurerm_storage_account.audit.primary_blob_endpoint
+  storage_account_access_key = azurerm_storage_account.audit.primary_access_key
+  retention_in_days          = 90
+}
+
