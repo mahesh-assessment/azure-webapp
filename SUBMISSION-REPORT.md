@@ -1,11 +1,4 @@
-# Technical Assessment Submission: Quote Web Application
-
-## 🎯 Executive Summary
-
-**Submitted by**: Maheshwaran  
-**Date**: 06/01/2026  
-**LinkedIn**: www.linkedin.com/in/maheshwaran-arunagiri-28b1a6251
-
+# Setup Quote Web Application on Azure with enterprise-grade security, high availability, and automated CI/CD pipelines
 
 **Core Achievement**: Successfully designed and deployed a production-ready quote web application on Azure with enterprise-grade security, high availability, and automated CI/CD pipelines.
 
